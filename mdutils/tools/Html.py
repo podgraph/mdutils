@@ -29,7 +29,7 @@ class Html:
         return '<p align="{}">\n    {}\n</p>'.format(align, text)
 
     @classmethod
-    def image(cls, path: str, size: str = None, align: str = None) -> str:
+    def image(cls, path: str, size: str = None, align: str = None, link = None) -> str:
         """
 
         :param path:
@@ -51,13 +51,19 @@ class Html:
         if align:
             return cls.paragraph(text=cls.__html_image(path=path, size=size), align=align)
 
-        return cls.__html_image(path=path, size=size)
+        return cls.__html_image(path=path, size=size, link=link)
 
     @classmethod
-    def __html_image(cls, path: str, size: str = None):
+    def __html_image(cls, path: str, size: str = None, link: str = None):
         if size:
-            return '<img src="{}" {}/>'.format(path, HtmlSize.size_to_width_and_height(size=size))
-        return '<img src="{}" />'.format(path)
+            if link:
+                return '<a href="{}"><img src="{}" {}/></a>'.format(link, path, HtmlSize.size_to_width_and_height(size=size))
+            else:
+                return '<img src="{}" {}/>'.format(path, HtmlSize.size_to_width_and_height(size=size))
+        if link:
+            return '<a href="{}"><img src="{}"/></a>'.format(link, path)
+        else:
+            return '<img src="{}" />'.format(path)
 
 
 class HtmlSize:
